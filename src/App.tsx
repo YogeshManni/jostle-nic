@@ -1,24 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   DesktopOutlined,
   FileOutlined,
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import Events from './components/Events/Events';
-
+} from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Breadcrumb, Layout, Menu, theme } from "antd";
+import Events from "./components/Events/Events";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Discussion from "./components/Discussion/Discussion";
 const { Header, Content, Footer, Sider } = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = Required<MenuProps>["items"][number];
 
 function getItem(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
-  children?: MenuItem[],
+  children?: MenuItem[]
 ): MenuItem {
   return {
     key,
@@ -29,15 +30,18 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
+  getItem("Option 1", "1", <PieChartOutlined />),
+  getItem("Option 2", "2", <DesktopOutlined />),
+  getItem("User", "sub1", <UserOutlined />, [
+    getItem("Tom", "3"),
+    getItem("Bill", "4"),
+    getItem("Alex", "5"),
   ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem("Team", "sub2", <TeamOutlined />, [
+    getItem("Team 1", "6"),
+    getItem("Team 2", "8"),
+  ]),
+  getItem("Files", "9", <FileOutlined />),
 ];
 
 const App: React.FC = () => {
@@ -47,22 +51,40 @@ const App: React.FC = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={["1"]}
+          mode="inline"
+          items={items}
+        />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} >
-          
-        </Header>
-        <Content style={{ margin: '0 16px' }}>
-          <br/>
-          <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
-             <Events/>
-                      </div>
+        <Header style={{ padding: 0, background: colorBgContainer }}></Header>
+        <Content style={{ margin: "0 16px" }}>
+          <br />
+          <div
+            style={{
+              padding: 24,
+              minHeight: 360,
+              background: colorBgContainer,
+            }}
+          >
+            <Router>
+              <Routes>
+                <Route path="/" element={<Events></Events>}></Route>
+                <Route path="/discussions" element={<Discussion />}></Route>
+              </Routes>
+            </Router>
+          </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Yogesh Manni ©2023</Footer>
+        <Footer style={{ textAlign: "center" }}>Yogesh Manni ©2023</Footer>
       </Layout>
     </Layout>
   );
