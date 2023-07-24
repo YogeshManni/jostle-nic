@@ -10,7 +10,7 @@ const events = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const Events = () => {
   return (
     //<div className="cardsContainer">
-    <Row gutter={18}>
+    <Row gutter={[18, 18]}>
       {events.map((item) => (
         <Col>
           <Card
@@ -27,7 +27,7 @@ const Events = () => {
               avatar={
                 <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
               }
-              title="Yogesh Manni"
+              title="Josh wells"
               description="New Opening of branch !!"
             />
             <br />
