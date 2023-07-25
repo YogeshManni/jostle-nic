@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Avatar, Divider, List, Skeleton } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, Button, Divider, Input, List, Skeleton, Space } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import './Comments.css'
+import { SendOutlined } from '@ant-design/icons';
 
 interface DataType {
   gender: string;
@@ -20,7 +22,8 @@ interface DataType {
 function Comments() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<DataType[]>([]);
-  
+    const [comment,setComment] = useState('');
+
     const loadMoreData = () => {
       if (loading) {
         return;
@@ -41,7 +44,15 @@ function Comments() {
       loadMoreData();
     }, []);
   
+    const  addComment = () =>
+    {
+        console.log(comment)
+        setComment('')
+        
+    }
+   
     return (
+      <>
       <div
         id="scrollableDiv"
         style={{
@@ -64,16 +75,25 @@ function Comments() {
             renderItem={(item) => (
               <List.Item key={item.email}>
                 <List.Item.Meta
+                className="metaList"
                   avatar={<Avatar src={item.picture.large} />}
                   title={<a href="https://ant.design">{item.name.last}</a>}
                   description={item.email}
                 />
-                <div>Content</div>
+                <div className='commentDateTime'>Content</div>
               </List.Item>
             )}
           />
         </InfiniteScroll>
+       
       </div>
+      <Space.Compact style={{ width: '100%' }} className='commentBox'>
+          <Input  onSubmit={addComment} value={comment} onChange={(e) => setComment(e.target.value)} onKeyDown={(e) => {if(e.key =='Enter') addComment()}} placeholder="Write a comment" />
+          <Button type="primary" onClick={addComment}><SendOutlined /></Button>
+      </Space.Compact>
+      
+
+       </>
     );
 }
 

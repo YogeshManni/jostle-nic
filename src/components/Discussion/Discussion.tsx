@@ -59,20 +59,20 @@ function Discussion() {
                 text="156"
                 key="list-vertical-star-o"
               />,
-              <button onClick={() => handleLikes(item)}>
+              <Button onClick={() => handleLikes(item)}>
                 <IconText
                   icon={LikeOutlined}
                   text={String(item.likes)}
                   key="list-vertical-like-o"
                 />
-              </button>,
-              <button onClick={showModal}>
+              </Button>,
+              <Button onClick={showModal}>
                 <IconText
                   icon={MessageOutlined}
                   text="2"
                   key="list-vertical-message"
                 />
-              </button>,
+              </Button>,
             ]}
           >
             <List.Item.Meta
