@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, Button, Divider, Input, List, Skeleton, Space } from 'antd';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import './Comments.css'
-import { SendOutlined } from '@ant-design/icons';
-
+import React, { useEffect, useRef, useState } from "react";
+import { Avatar, Button, Divider, Input, List, Skeleton, Space } from "antd";
+import InfiniteScroll from "react-infinite-scroll-component";
+import "./Comments.css";
+import { SendOutlined } from "@ant-design/icons";
+import moment from "moment";
 interface DataType {
   gender: string;
   name: {
@@ -20,12 +20,22 @@ interface DataType {
   nat: string;
 }
 function Comments() {
-    const [loading, setLoading] = useState(false);
-    const [data, setData] = useState<DataType[]>([]);
-    const [comment,setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<any>([]);
+  const [comment, setComment] = useState("");
 
-    const loadMoreData = () => {
-      if (loading) {
+  const loadMoreData = () => {
+    let fakeData = [
+      {
+        img: "/data/img1",
+        username: "bob",
+        comment: "What a wonderful story",
+        date: "25/07/2023",
+      },
+    ];
+    setData([...data, ...fakeData]);
+    setLoading(false);
+    /*   if (loading) {
         return;
       }
       setLoading(true);
@@ -37,29 +47,33 @@ function Comments() {
         })
         .catch(() => {
           setLoading(false);
-        });
+        }); */
+  };
+
+  useEffect(() => {
+    loadMoreData();
+  }, []);
+
+  const addComment = () => {
+    const newComment = {
+      img: "/data/img1",
+      username: "bob",
+      comment: comment,
+      date: moment().format("LLL"),
     };
-  
-    useEffect(() => {
-      loadMoreData();
-    }, []);
-  
-    const  addComment = () =>
-    {
-        console.log(comment)
-        setComment('')
-        
-    }
-   
-    return (
-      <>
+    setData([...data, newComment]);
+    setComment("");
+  };
+
+  return (
+    <>
       <div
         id="scrollableDiv"
         style={{
           height: 400,
-          overflow: 'auto',
-          padding: '0 16px',
-          border: '1px solid rgba(140, 140, 140, 0.35)',
+          overflow: "auto",
+          padding: "0 16px",
+          border: "1px solid rgba(140, 140, 140, 0.35)",
         }}
       >
         <InfiniteScroll
@@ -72,29 +86,36 @@ function Comments() {
         >
           <List
             dataSource={data}
-            renderItem={(item) => (
-              <List.Item key={item.email}>
+            renderItem={(item: any) => (
+              <List.Item key={item.img}>
                 <List.Item.Meta
-                className="metaList"
-                  avatar={<Avatar src={item.picture.large} />}
-                  title={<a href="https://ant.design">{item.name.last}</a>}
-                  description={item.email}
+                  className="metaList"
+                  avatar={<Avatar src={item.img} />}
+                  title={<a href="https://ant.design">{item.username}</a>}
+                  description={item.comment}
                 />
-                <div className='commentDateTime'>Content</div>
+                <div className="commentDateTime">{item.date}</div>
               </List.Item>
             )}
           />
         </InfiniteScroll>
-       
       </div>
-      <Space.Compact style={{ width: '100%' }} className='commentBox'>
-          <Input  onSubmit={addComment} value={comment} onChange={(e) => setComment(e.target.value)} onKeyDown={(e) => {if(e.key =='Enter') addComment()}} placeholder="Write a comment" />
-          <Button type="primary" onClick={addComment}><SendOutlined /></Button>
+      <Space.Compact style={{ width: "100%" }} className="commentBox">
+        <Input
+          onSubmit={addComment}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key == "Enter") addComment();
+          }}
+          placeholder="Write a comment"
+        />
+        <Button type="primary" onClick={addComment}>
+          <SendOutlined />
+        </Button>
       </Space.Compact>
-      
-
-       </>
-    );
+    </>
+  );
 }
 
-export default Comments
+export default Comments;
