@@ -1,0 +1,6 @@
+.viewEventContainer
+{
+    overflow-y: scroll;
+    border: 0.5px solid rgb(207, 207, 207);
+    padding: 20px;
+}
