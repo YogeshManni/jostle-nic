@@ -11,6 +11,7 @@ import { Breadcrumb, Layout, Menu, theme } from "antd";
 import Events from "./components/Events/Events";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Discussion from "./components/Discussion/Discussion";
+
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
