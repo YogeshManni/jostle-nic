@@ -4,6 +4,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import "./Comments.css";
 import { SendOutlined } from "@ant-design/icons";
 import moment from "moment";
+import { addCommentTodb, getCommentFromdb } from "../../../services/api";
+
 interface DataType {
   gender: string;
   name: {
@@ -19,12 +21,15 @@ interface DataType {
   };
   nat: string;
 }
-function Comments() {
+function Comments(props: any) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>([]);
   const [comment, setComment] = useState("");
 
   const loadMoreData = () => {
+    if (loading) {
+      return;
+    }
     let fakeData = [
       {
         img: "/data/img1",
@@ -51,17 +56,25 @@ function Comments() {
   };
 
   useEffect(() => {
-    loadMoreData();
+    const _getComments = async () => {
+      const res = await getCommentFromdb(props._discussionId, props.type);
+      setData([...data, ...res]);
+      setLoading(false);
+    };
+    _getComments();
   }, []);
 
-  const addComment = () => {
+  const addComment = async () => {
     const newComment = {
-      img: "/data/img1",
+      discussionid: props._discussionId,
       username: "bob",
       comment: comment,
       date: moment().format("LLL"),
+      type: props.type,
     };
-    setData([...data, newComment]);
+
+    const res = await addCommentTodb(newComment);
+    setData([...data, res]);
     setComment("");
   };
 
@@ -76,29 +89,24 @@ function Comments() {
           border: "1px solid rgba(140, 140, 140, 0.35)",
         }}
       >
-        <InfiniteScroll
-          dataLength={data.length}
-          next={loadMoreData}
-          hasMore={data.length < 50}
-          loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-          scrollableTarget="scrollableDiv"
-        >
-          <List
-            dataSource={data}
-            renderItem={(item: any) => (
-              <List.Item key={item.img}>
-                <List.Item.Meta
-                  className="metaList"
-                  avatar={<Avatar src={item.img} />}
-                  title={<a href="https://ant.design">{item.username}</a>}
-                  description={item.comment}
-                />
-                <div className="commentDateTime">{item.date}</div>
-              </List.Item>
-            )}
-          />
-        </InfiniteScroll>
+        <List
+          dataSource={data}
+          renderItem={(item: any) => (
+            <List.Item key={item.img}>
+              <List.Item.Meta
+                className="metaList"
+                avatar={
+                  <Avatar
+                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${props._discussionid}`}
+                  />
+                }
+                title={<a href="https://ant.design">{item.username}</a>}
+                description={item.comment}
+              />
+              <div className="commentDateTime">{item.date}</div>
+            </List.Item>
+          )}
+        />
       </div>
       <Space.Compact style={{ width: "100%" }} className="commentBox">
         <Input

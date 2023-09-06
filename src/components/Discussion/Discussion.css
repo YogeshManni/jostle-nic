@@ -1,3 +1,8 @@
 .ant-list-item-meta-title {
   line-height: 0.2 !important;
 }
+
+.listDiv {
+  height: 87vh;
+  overflow-y: auto;
+}

@@ -9,6 +9,7 @@ import React, {
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./AddEvent.css";
+import moment from "moment";
 const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
   const [content, setContent] = useState("");
   const editorRef = useRef<any>("");
@@ -45,6 +46,7 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
         avtSrc: "https://xsgames.co/randomusers/avatar.php?g=pixel",
         userName: "Josh wells",
         content: editorContent,
+        date: moment().format("LLL"),
       };
       getAddEvent(data);
     },
@@ -58,6 +60,10 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
     setEditorHeight(parentHeight);
     console.log(postData);
     setContent(!newPost && postData);
+
+    return () => {
+      console.log("unmounted!!");
+    };
     // editorContentRef.current.value = postData;
   }, []);
 

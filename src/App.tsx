@@ -6,11 +6,13 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import type { MenuProps } from "antd";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import Events from "./components/Events/Events";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Discussion from "./components/Discussion/Discussion";
+import People from "./components/People/People";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -20,36 +22,36 @@ function getItem(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
+  route?: any,
   children?: MenuItem[]
 ): MenuItem {
   return {
+    label,
     key,
     icon,
+    route,
     children,
-    label,
   } as MenuItem;
 }
 
 const items: MenuItem[] = [
-  getItem("Option 1", "1", <PieChartOutlined />),
-  getItem("Option 2", "2", <DesktopOutlined />),
-  getItem("User", "sub1", <UserOutlined />, [
-    getItem("Tom", "3"),
-    getItem("Bill", "4"),
-    getItem("Alex", "5"),
-  ]),
-  getItem("Team", "sub2", <TeamOutlined />, [
-    getItem("Team 1", "6"),
-    getItem("Team 2", "8"),
-  ]),
-  getItem("Files", "9", <FileOutlined />),
+  getItem("Events", "0", <PieChartOutlined />, "/"),
+  getItem("Discussions", "1", <DesktopOutlined />, "/discussions"),
+  getItem("People", "2", <UserOutlined />, "/people"),
 ];
 
 const App: React.FC = () => {
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const menuClick: MenuProps["onClick"] = (e: any) => {
+    //
+    let data: any = items[e.key];
+    navigate(data.route);
+  };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -60,8 +62,9 @@ const App: React.FC = () => {
       >
         <div className="demo-logo-vertical" />
         <Menu
+          onClick={menuClick}
           theme="dark"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={["0"]}
           mode="inline"
           items={items}
         />
@@ -77,12 +80,11 @@ const App: React.FC = () => {
               background: colorBgContainer,
             }}
           >
-            <Router>
-              <Routes>
-                <Route path="/" element={<Events></Events>}></Route>
-                <Route path="/discussions" element={<Discussion />}></Route>
-              </Routes>
-            </Router>
+            <Routes>
+              <Route path="/" element={<Events></Events>}></Route>
+              <Route path="/discussions" element={<Discussion />}></Route>
+              <Route path="/people" element={<People />}></Route>
+            </Routes>
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>Yogesh Manni ©2023</Footer>
