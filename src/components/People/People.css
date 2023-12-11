@@ -1,0 +1,28 @@
+.peopleCards {
+  width: 200px;
+  height: 300px;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.peopleCards .ant-card-body {
+  padding: 15px 15px 0px 15px !important;
+}
+
+p {
+  line-height: 2px !important;
+}
+
+hr {
+  border: 1px solid rgb(231, 229, 229);
+  line-height: 10px !important;
+}
+
+.cardData p {
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 900px) {
+  .peopleModal {
+    width: 80vw !important;
+  }
+}
