@@ -21,6 +21,7 @@ import Discussion from "./components/Discussion/Discussion";
 import Posts from "./components/posts/Posts";
 import logo from "./assets/img/logo.png";
 import People from "./components/People/People";
+import CreatePost from "./components/createPost/CreatePost";
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -46,7 +47,7 @@ const items: MenuItem[] = [
   getItem("Events", "1", <DesktopOutlined />, "/events"),
   getItem("Discussions", "2", <FileOutlined />, "/discussions"),
   getItem("Create", "3", <AppstoreAddOutlined />, "/create"),
-   getItem("People", "4", <UserOutlined />, "/people")
+  getItem("People", "4", <UserOutlined />, "/people"),
 ];
 
 const App: React.FC = () => {
@@ -101,7 +102,7 @@ const App: React.FC = () => {
               <Route path="/events" element={<Events></Events>}></Route>
               <Route path="/discussions" element={<Discussion />}></Route>
               <Route path="/create" element={<CreatePost />}></Route>
-	       <Route path="/people" element={<People />}></Route>
+              <Route path="/people" element={<People />}></Route>
             </Routes>
           </div>
         </Content>

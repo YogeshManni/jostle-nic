@@ -42,6 +42,6 @@
   }
 }
 
-.ant-upload-wrapper {
+.uploadBtn .ant-upload-wrapper {
   float: right !important;
 }

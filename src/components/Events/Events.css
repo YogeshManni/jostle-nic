@@ -30,7 +30,7 @@
   }
 }
 
-.ant-card-meta-description {
+.d-card .ant-card-meta-description {
   width: 200px;
   white-space: nowrap;
   overflow: hidden;

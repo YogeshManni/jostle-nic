@@ -1,6 +1,6 @@
 .peopleCards {
-  width: 200px;
-  height: 300px;
+  width: 250px;
+  height: 400px;
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
@@ -8,11 +8,11 @@
   padding: 15px 15px 0px 15px !important;
 }
 
-p {
-  line-height: 2px !important;
-}
+/* .peopleContainer p {
+  line-height: 18px !important;
+} */
 
-hr {
+.peopleContainer hr {
   border: 1px solid rgb(231, 229, 229);
   line-height: 10px !important;
 }

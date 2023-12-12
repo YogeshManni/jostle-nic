@@ -76,52 +76,56 @@ const Events = () => {
       <Row style={{ marginTop: "50px" }} gutter={[18, 18]}>
         {events.map((item: any, idx: any) => (
           <Col key={idx}>
-            <Card
-              hoverable
-              className="cards"
-              onClick={() => {
-                handleCardClick(item);
-              }}
-              cover={<img height="200px" alt="example" src={item.img} />}
-            >
-              <Meta
-                avatar={<Avatar src={`${item.avtsrc}&key=${idx}`} />}
-                title={item.username}
-                description={item.fronttext || `Content ahead`}
-              />
-              <br />
-              <hr />
-              <div className="options">
-                <span>
-                  <EyeOutlined /> <span>{item.views}</span>
-                </span>
-                <span>
-                  <CommentOutlined
-                    className="icons"
-                    onClick={(e) => {
-                      setEventId(item.id);
-                      setCommentsModalState(true);
-                      e.stopPropagation();
-                    }}
-                  />
-                  <span>{item.totalcomments}</span>
-                </span>
-                <span>
-                  <HeartOutlined
-                    className="icons"
-                    onClick={(e) => {
-                      item.likes = (item.likes ? item.likes : 0) + 1;
-                      updateLikes({
-                        likes: item.likes,
-                        id: item.id,
-                      });
-                      e.stopPropagation();
-                    }}
-                  />{" "}
-                  <span>{item.likes}</span>
-                </span>
-              </div>
-            </Card>
+            <div className="d-card">
+              <Card
+                hoverable
+                className="cards"
+                onClick={() => {
+                  handleCardClick(item);
+                }}
+                cover={
+                  <img className="h-[200px] !" alt="example" src={item.img} />
+                }
+              >
+                <Meta
+                  avatar={<Avatar src={`${item.avtsrc}&key=${idx}`} />}
+                  title={item.username}
+                  description={item.fronttext || `Content ahead`}
+                />
+                <br />
+                <hr />
+                <div className="options">
+                  <span>
+                    <EyeOutlined /> <span>{item.views}</span>
+                  </span>
+                  <span>
+                    <CommentOutlined
+                      className="icons"
+                      onClick={(e) => {
+                        setEventId(item.id);
+                        setCommentsModalState(true);
+                        e.stopPropagation();
+                      }}
+                    />
+                    <span>{item.totalcomments}</span>
+                  </span>
+                  <span>
+                    <HeartOutlined
+                      className="icons"
+                      onClick={(e) => {
+                        item.likes = (item.likes ? item.likes : 0) + 1;
+                        updateLikes({
+                          likes: item.likes,
+                          id: item.id,
+                        });
+                        e.stopPropagation();
+                      }}
+                    />{" "}
+                    <span>{item.likes}</span>
+                  </span>
+                </div>
+              </Card>
+            </div>
           </Col>
         ))}
       </Row>

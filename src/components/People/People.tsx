@@ -18,7 +18,7 @@ function People() {
   }, []);
 
   return (
-    <div>
+    <div className="peopleContainer">
       <Row style={{ marginTop: "50px" }} gutter={[18, 18]}>
         {users &&
           users.map((item: any, idx: any) => (

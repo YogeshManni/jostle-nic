@@ -34,9 +34,11 @@ function Profile(props: any) {
             />
           }
         >
-          <Upload {...upProps}>
-            <Button icon={<UploadOutlined />}>Click to Upload</Button>
-          </Upload>
+          <div className="uploadBtn">
+            <Upload {...upProps}>
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+          </div>
           <b>
             <p>{props.user.fullname}</p>
           </b>
