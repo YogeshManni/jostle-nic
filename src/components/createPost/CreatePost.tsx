@@ -14,6 +14,8 @@ import {
 } from "antd";
 import { CloudUploadOutlined, InboxOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
+import { uploadImage } from "../../services/api";
+import { fileURLToPath } from "url";
 
 const CreatePost = () => {
   const [u_img, setImage]: any = useState("");
@@ -31,31 +33,28 @@ const CreatePost = () => {
     }
 
     const props: UploadProps = {
-      name: "file",
+      name: "image-file",
       multiple: false,
-
+      action: "http://localhost:4000/posts/uploadImage",
       onChange(info: any) {
-        console.log(info);
-        /*  setImage(
-          "https://helpdesk.courtenay.ca/custom/customimages/Custom_HeadLogo.gif?1702403617360"
-        ); */
-        getImage(info.file.originFileObj, (imageUrl: any) => {
-          setImage(imageUrl);
-          //   setLoading(false);
-          // setProfilePicture(imageUrl);
-        });
-        /* const { status } = info.file;
-        if (status !== "uploading") {
-          console.log(info.file, info.fileList);
-        }
-        if (status === "done") {
-          console.log(info);
+        console.log(info.file);
+        if (info.file.status == "done") {
           message.success(
             `${info.file.name} file uploaded successfully, click Next to proceed`
           );
-        } else if (status === "error") {
-          message.error(`${info.file.name} file upload failed.`);
-        } */
+          getImage(info.file.originFileObj, (imageUrl: any) => {
+            setImage(imageUrl);
+          });
+          /*   const uploadImageinDb = async (data: any) => {
+          console.log("called");
+          const result = await uploadImage(data);
+          console.log(result);
+        }; */
+
+          /*  const data = new FormData();
+          data.append("image-file", info.file.originFileObj);
+          uploadImageinDb(data); */
+        }
       },
       onDrop(e: any) {
         console.log("Dropped files", e.dataTransfer.files);

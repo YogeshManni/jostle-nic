@@ -71,3 +71,13 @@ export const getUsersFromDb = async () => {
     return res.data;
   });
 };
+
+export const uploadImage = async (obj: any) => {
+  return await axios
+    .post(`${baseURL}/posts/uploadImage`, obj, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((res) => {
+      return res.data;
+    });
+};
