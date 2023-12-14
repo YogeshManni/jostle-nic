@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:4000";
+const baseURL = process.env.REACT_APP_BASEURL;
 
 export const addEventToDb = async (data: any) => {
   console.log(data);
@@ -10,6 +10,7 @@ export const addEventToDb = async (data: any) => {
 };
 
 export const getEventFromDb = async () => {
+  console.log(`${baseURL}/event/`);
   return await axios.get(`${baseURL}/event/`).then((res) => {
     return res.data;
   });
@@ -72,12 +73,8 @@ export const getUsersFromDb = async () => {
   });
 };
 
-export const uploadImage = async (obj: any) => {
-  return await axios
-    .post(`${baseURL}/posts/uploadImage`, obj, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    .then((res) => {
-      return res.data;
-    });
+export const addPost = async (obj: any) => {
+  return await axios.post(`${baseURL}/posts/addPost`, obj).then((res) => {
+    return res.data;
+  });
 };

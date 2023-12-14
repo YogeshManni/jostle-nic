@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import {
   Avatar,
@@ -14,11 +14,15 @@ import {
 } from "antd";
 import { CloudUploadOutlined, InboxOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
-import { uploadImage } from "../../services/api";
+import { addPost } from "../../services/api";
 import { fileURLToPath } from "url";
+import moment from "moment";
 
 const CreatePost = () => {
   const [u_img, setImage]: any = useState("");
+  const [dateTime, setDateTime]: any = useState("");
+  const [imgName, setImgName] = useState("");
+  const caption = useRef("");
   {
     /* First Step to select content to upload*/
   }
@@ -31,29 +35,27 @@ const CreatePost = () => {
       reader.addEventListener("load", () => callback(reader.result));
       reader.readAsDataURL(img);
     }
-
+    useEffect(() => {
+      if (!dateTime) setDateTime(String(moment().format()));
+    }, []);
     const props: UploadProps = {
       name: "image-file",
       multiple: false,
-      action: "http://localhost:4000/posts/uploadImage",
+      action: `${process.env.REACT_APP_BASEURL}/posts/uploadImage`,
+
+      data: { name: `Jon${dateTime}` },
+
       onChange(info: any) {
         console.log(info.file);
+        console.log(dateTime);
         if (info.file.status == "done") {
           message.success(
             `${info.file.name} file uploaded successfully, click Next to proceed`
           );
           getImage(info.file.originFileObj, (imageUrl: any) => {
+            setImgName(info.file.name);
             setImage(imageUrl);
           });
-          /*   const uploadImageinDb = async (data: any) => {
-          console.log("called");
-          const result = await uploadImage(data);
-          console.log(result);
-        }; */
-
-          /*  const data = new FormData();
-          data.append("image-file", info.file.originFileObj);
-          uploadImageinDb(data); */
         }
       },
       onDrop(e: any) {
@@ -84,14 +86,9 @@ const CreatePost = () => {
   }
 
   const PostDetails = () => {
-    const [caption, setCaption] = useState("");
-
-    useEffect(() => {
-      console.log(u_img);
-    }, []);
-
     const updateCaption = (e: any) => {
-      setCaption(e.target.value);
+      console.log(e.target.value);
+      caption.current = e.target.value;
     };
     return (
       <div className="detailsData">
@@ -145,6 +142,21 @@ const CreatePost = () => {
     setCurrent(current - 1);
   };
 
+  const uploadPost = async () => {
+    const data = {
+      username: "Jon",
+      email: "jon@gmail.com",
+      likes: 0,
+      img: `Jon${dateTime}${imgName}`,
+      caption: caption.current,
+      date: moment().format("MMM Do yyyy, h:mm:ss a"),
+    };
+    setDateTime(null);
+    console.log(data);
+    const res = await addPost(data);
+    console.log(res);
+  };
+
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
 
   const contentStyle: React.CSSProperties = {
@@ -168,9 +180,7 @@ const CreatePost = () => {
             </Button>
           )}
           {current === steps.length - 1 && (
-            <Button onClick={() => message.success("Processing complete!")}>
-              Done
-            </Button>
+            <Button onClick={uploadPost}>Done</Button>
           )}
           {current > 0 && (
             <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
