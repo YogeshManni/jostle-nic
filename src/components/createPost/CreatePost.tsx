@@ -154,7 +154,11 @@ const CreatePost = () => {
     setDateTime(null);
     console.log(data);
     const res = await addPost(data);
-    console.log(res);
+    if (res.status == "success") {
+      message.success(`Post uploaded successfully !!`);
+    } else {
+      message.error("Some error occured, please try again !!");
+    }
   };
 
   const items = steps.map((item) => ({ key: item.title, title: item.title }));

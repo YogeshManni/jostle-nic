@@ -9,6 +9,7 @@ import {
   SmileOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
+import { getPostsFromDb } from "../../services/api";
 
 const Posts = () => {
   const post = {
@@ -22,7 +23,13 @@ const Posts = () => {
     likes: "421",
     createdAt: "Dec 25, 2023",
   };
-
+  useEffect(() => {
+    const email = "jon@gmail.com";
+    const getPosts = async () => {
+      const posts = await getPostsFromDb(email);
+      console.log(posts);
+    };
+  }, []);
   return (
     <section className="flex justify-center">
       <div className="relative card space-y-4 max-w-[430px] shadow-lg p-4 rounded-[20px]">

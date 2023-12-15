@@ -78,3 +78,9 @@ export const addPost = async (obj: any) => {
     return res.data;
   });
 };
+
+export const getPostsFromDb = async (obj: any) => {
+  return await axios.post(`${baseURL}/posts/`, obj).then((res) => {
+    return res.data;
+  });
+};
