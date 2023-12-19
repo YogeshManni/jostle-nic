@@ -1,1 +1,7 @@
-@import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+/* @import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"; */
+
+.ant-layout-sider {
+  /*   position: fixed !important;
+  height: 100vh;
+  z-index: 999 !important; */
+}

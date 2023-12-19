@@ -17,7 +17,7 @@ import {
 } from "../../services/api";
 import Comments from "../Discussion/Comments/Comments";
 const { Meta } = Card;
-
+<style></style>;
 const Events = () => {
   const [modelState, setModalState] = useState(false);
   const [commentsModalState, setCommentsModalState] = useState(false);

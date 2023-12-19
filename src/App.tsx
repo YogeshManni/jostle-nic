@@ -22,6 +22,7 @@ import Posts from "./components/posts/Posts";
 import logo from "./assets/img/logo.png";
 import People from "./components/People/People";
 import CreatePost from "./components/createPost/CreatePost";
+import "./App.css";
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -69,6 +70,7 @@ const App: React.FC = () => {
         breakpoint="lg"
         collapsedWidth="0"
         collapsible
+        /*   style={{ position: "fixed" }} */
         onBreakpoint={(broken) => {
           //console.log(broken);
         }}

@@ -107,7 +107,7 @@ const CreatePost = () => {
               </b>
             </div>
             <TextArea
-              className="mt-5"
+              className="mt-5 mb-5"
               showCount
               maxLength={500}
               onChange={updateCaption}

@@ -1,0 +1,35 @@
+.options {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+.options span {
+  padding: 10px 0px 0px 7px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: row;
+}
+.cards {
+  width: 300px;
+  height: 360px;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+@media only screen and (max-width: 800px) {
+  .cardsContainer {
+    display: grid;
+    grid-row: 1;
+  }
+  .cards {
+    width: 250px;
+  }
+}
+
+.icons:hover {
+  font-size: 30px;
+}
