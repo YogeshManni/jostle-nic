@@ -4,7 +4,6 @@ import {
   Avatar,
   Button,
   Col,
-  List,
   message,
   Row,
   Steps,
@@ -12,10 +11,9 @@ import {
   Upload,
   UploadProps,
 } from "antd";
-import { CloudUploadOutlined, InboxOutlined } from "@ant-design/icons";
+import { InboxOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { addPost } from "../../services/api";
-import { fileURLToPath } from "url";
 import moment from "moment";
 
 const CreatePost = () => {
@@ -23,6 +21,7 @@ const CreatePost = () => {
   const [dateTime, setDateTime]: any = useState("");
   const [imgName, setImgName] = useState("");
   const caption = useRef("");
+  const [current, setCurrent] = useState(0);
   {
     /* First Step to select content to upload*/
   }
@@ -38,28 +37,32 @@ const CreatePost = () => {
     useEffect(() => {
       if (!dateTime) setDateTime(String(moment().format()));
     }, []);
+
+    function uploadImage(info: any) {
+      console.log(info.file);
+      console.log(dateTime);
+      if (info.file.status == "done") {
+        message.success(
+          `${info.file.name} file uploaded successfully, add a caption for your post !!`
+        );
+        getImage(info.file.originFileObj, (imageUrl: any) => {
+          setImgName(info.file.name);
+          setImage(imageUrl);
+          setCurrent(current + 1);
+        });
+      }
+    }
     const props: UploadProps = {
       name: "image-file",
       multiple: false,
+      listType: "picture",
+
       action: `${process.env.REACT_APP_BASEURL}/posts/uploadImage`,
 
       data: { name: `Jon${dateTime}` },
 
       onChange(info: any) {
-        console.log(info.file);
-        console.log(dateTime);
-        if (info.file.status == "done") {
-          message.success(
-            `${info.file.name} file uploaded successfully, click Next to proceed`
-          );
-          getImage(info.file.originFileObj, (imageUrl: any) => {
-            setImgName(info.file.name);
-            setImage(imageUrl);
-          });
-        }
-      },
-      onDrop(e: any) {
-        console.log("Dropped files", e.dataTransfer.files);
+        uploadImage(info);
       },
     };
 
@@ -87,17 +90,16 @@ const CreatePost = () => {
 
   const PostDetails = () => {
     const updateCaption = (e: any) => {
-      console.log(e.target.value);
       caption.current = e.target.value;
     };
     return (
       <div className="detailsData">
         <Row className="">
-          <Col span={12}>
+          <Col md={24} lg={12}>
             <img src={u_img} className="h-[50vh]"></img>
           </Col>
-          <Col span={12} className="flex flex-col px-10">
-            <div className="flex   space-x-5 mt-[20px]">
+          <Col md={24} lg={12} className="flex flex-col px-10 w-full">
+            <div className="flex  w-full space-x-5 mt-[20px]">
               <Avatar
                 size="large"
                 src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=1`}
@@ -107,7 +109,7 @@ const CreatePost = () => {
               </b>
             </div>
             <TextArea
-              className="mt-5 mb-5"
+              className="mt-5 mb-5 w-full"
               showCount
               maxLength={500}
               onChange={updateCaption}
@@ -132,7 +134,6 @@ const CreatePost = () => {
   ];
 
   const { token } = theme.useToken();
-  const [current, setCurrent] = useState(0);
 
   const next = () => {
     setCurrent(current + 1);

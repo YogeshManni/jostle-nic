@@ -16,6 +16,7 @@ import {
 } from "../../services/api";
 import Comments from "../Discussion/Comments/Comments";
 import moment from "moment";
+import { Image } from "antd";
 
 const Posts = () => {
   const [posts, setPosts]: any = useState([]);
@@ -27,12 +28,17 @@ const Posts = () => {
     const email = "jon@gmail.com";
     const getPosts = async () => {
       const posts = await getPostsFromDb({ email: email });
+      posts.posts.forEach((item: any, ind: number) => {
+        item.input = "";
+      });
+
       setPosts(posts.posts);
     };
     getPosts();
   }, []);
 
-  const handleComment = (e: any) => {
+  const handleComment = (e: any, post: any) => {
+    post.input = e.target.value;
     setComment(e.target.value);
   };
   const showModal = () => {
@@ -50,14 +56,14 @@ const Posts = () => {
     updatePostLikesInDb({ id: post.id });
   }
 
-  async function addComment(postId: any) {
+  async function addComment(postId: any, post: any) {
     if (comment.trim() === "") {
       alert("Please type a comment to post, Empty comment won't be posted !!");
       return;
     }
     const newComment = {
       discussionid: postId,
-      username: "bob",
+      username: "jon",
       comment: comment,
       date: moment().format("LLL"),
       type: "posts",
@@ -65,9 +71,8 @@ const Posts = () => {
 
     const res = await addCommentTodb(newComment);
     setPostId(postId);
-    setComment("");
+    post.input = "";
     setIsModalOpen(true);
-    console.log(res);
   }
   return (
     <section className="flex flex-col  items-center">
@@ -94,8 +99,7 @@ const Posts = () => {
 
             {/* Posted Image */}
             <div className="relative  aspect-square overflow-hidden">
-              <img
-                className="w-full h-full"
+              <Image
                 src={`${process.env.REACT_APP_BASEURL}/posts/${post.img}`}
                 alt={post.username}
               />
@@ -133,7 +137,9 @@ const Posts = () => {
                 <span className="font-semibold">{post.username} </span>
                 {post.caption}
               </p>
-              <h3 className="text-xs text-gray-500">{post.date}</h3>
+              <h3 className="text-xs text-gray-500">
+                {moment(post.date).format("LLL")}
+              </h3>
             </div>
             <hr className="text-[#d1d5db]" />
             <div className="flex gap-4" style={{ marginTop: "5px" }}>
@@ -142,12 +148,16 @@ const Posts = () => {
               </Button>
               <input
                 className="focus:outline-none w-full"
+                key={ind}
+                value={post.input}
                 type="text"
                 placeholder="Add a comment"
-                onChange={handleComment}
+                onChange={(event) => {
+                  handleComment(event, post);
+                }}
               />
               <button
-                onClick={() => addComment(post.id)}
+                onClick={() => addComment(post.id, post)}
                 className="text-blue-500"
               >
                 Post

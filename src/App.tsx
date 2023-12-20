@@ -89,7 +89,11 @@ const App: React.FC = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}></Header>
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          <div className="w-full h-full flex justify-center items-center">
+            <img src={logo} className="h-10"></img>
+          </div>
+        </Header>
         <Content style={{ margin: "0 16px" }}>
           <br />
           <div
