@@ -42,9 +42,6 @@ const CreatePost = () => {
       console.log(info.file);
       console.log(dateTime);
       if (info.file.status == "done") {
-        message.success(
-          `${info.file.name} file uploaded successfully, add a caption for your post !!`
-        );
         getImage(info.file.originFileObj, (imageUrl: any) => {
           setImgName(info.file.name);
           setImage(imageUrl);
@@ -63,6 +60,13 @@ const CreatePost = () => {
 
       onChange(info: any) {
         uploadImage(info);
+      },
+      beforeUpload(file) {
+        if (!file.type.includes("image")) {
+          message.error("Please upload an image only");
+          return false;
+        }
+        return true;
       },
     };
 
@@ -136,6 +140,14 @@ const CreatePost = () => {
   const { token } = theme.useToken();
 
   const next = () => {
+    if (imgName === "") {
+      message.open({
+        type: "error",
+        content: "Please upload an image to proceed further !!",
+        duration: 7,
+      });
+      return;
+    }
     setCurrent(current + 1);
   };
 

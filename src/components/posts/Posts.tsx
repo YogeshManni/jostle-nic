@@ -8,7 +8,7 @@ import {
   ShareAltOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Button, Modal } from "antd";
+import { Badge, Button, Modal } from "antd";
 import {
   addCommentTodb,
   getPostsFromDb,
@@ -122,7 +122,9 @@ const Posts = () => {
                       showModal();
                     }}
                   >
-                    <MessageOutlined className="text-[20px] text-red-500 !" />
+                    <Badge count={post.totalcomments} showZero>
+                      <MessageOutlined className="text-[20px] text-red-500 !" />
+                    </Badge>
                   </Button>
                   <Button className="border-none px-[0px]">
                     <ShareAltOutlined className="text-[20px] text-red-500 !" />
