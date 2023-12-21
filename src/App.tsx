@@ -23,6 +23,8 @@ import logo from "./assets/img/logo.png";
 import People from "./components/People/People";
 import CreatePost from "./components/createPost/CreatePost";
 import "./App.css";
+import Login from "./components/Login/Login";
+import { getUserName } from "./helpers/helper";
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -51,6 +53,14 @@ const items: MenuItem[] = [
   getItem("People", "4", <UserOutlined />, "/people"),
 ];
 
+const LogoComponent = () => {
+  return (
+    <div className="h-[20px] auto m-5 flex items-center justify-center">
+      <img src={logo} className="h-10" alt="logo"></img>
+    </div>
+  );
+};
+
 const App: React.FC = () => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
@@ -64,63 +74,112 @@ const App: React.FC = () => {
     navigate(data.route);
   };
 
+  const [type, setType] = useState("signIn");
+  const handleOnClick = (text: any) => {
+    if (text !== type) {
+      setType(text);
+      return;
+    }
+  };
+  const containerClass =
+    "container " + (type === "signUp" ? "right-panel-active" : "");
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        breakpoint="lg"
-        collapsedWidth="0"
-        collapsible
-        /*   style={{ position: "fixed" }} */
-        onBreakpoint={(broken) => {
-          //console.log(broken);
-        }}
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
-        <div className="h-[20px] auto m-5 flex items-center justify-center">
-          <img src={logo} className=" h-auto" alt="logo"></img>
-        </div>
-        <Menu
-          onClick={menuClick}
-          theme="dark"
-          defaultSelectedKeys={["0"]}
-          mode="inline"
-          items={items}
-        />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <div className="w-full h-full flex justify-center items-center">
-            <img src={logo} className="h-10"></img>
-          </div>
-        </Header>
-        <Content style={{ margin: "0 16px" }}>
-          <br />
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-            }}
-          >
+    <>
+      {!getUserName() ? (
+        <div className="App">
+          <LogoComponent />
+          <div className={containerClass} id="container">
             <Routes>
-              <Route path="/" element={<Posts></Posts>}></Route>
-              <Route path="/events" element={<Events></Events>}></Route>
-              <Route path="/discussions" element={<Discussion />}></Route>
-              <Route path="/create" element={<CreatePost />}></Route>
-              <Route path="/people" element={<People />}></Route>
+              <Route path="/" element={<Login></Login>}></Route>
             </Routes>
+            <div className="overlay-container">
+              <div className="overlay">
+                <div className="overlay-panel overlay-left">
+                  <h1>Welcome Back!</h1>
+                  <p>
+                    To keep connected with us please login with your personal
+                    info
+                  </p>
+                  <button
+                    className="ghost"
+                    id="signIn"
+                    onClick={() => handleOnClick("signIn")}
+                  >
+                    Sign In
+                  </button>
+                </div>
+                <div className="overlay-panel overlay-right">
+                  <h1>Hello, Friend!</h1>
+                  <p>Enter your personal details and start journey with us</p>
+                  <button
+                    className="ghost "
+                    id="signUp"
+                    onClick={() => handleOnClick("signUp")}
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-        </Content>
-        <Footer
-          style={{
-            textAlign: "center",
-          }}
-        >
-          Yogesh Manni ©2024
-        </Footer>
-      </Layout>
-    </Layout>
+        </div>
+      ) : (
+        <Layout style={{ minHeight: "100vh" }}>
+          <Sider
+            breakpoint="lg"
+            collapsedWidth="0"
+            collapsible
+            /*   style={{ position: "fixed" }} */
+            onBreakpoint={(broken) => {
+              //console.log(broken);
+            }}
+            collapsed={collapsed}
+            onCollapse={(value) => setCollapsed(value)}
+          >
+            <div className="h-[20px] auto m-5 flex items-center justify-center">
+              <img src={logo} className=" h-auto" alt="logo"></img>
+            </div>
+            <Menu
+              onClick={menuClick}
+              theme="dark"
+              defaultSelectedKeys={["0"]}
+              mode="inline"
+              items={items}
+            />
+          </Sider>
+          <Layout>
+            <Header style={{ padding: 0, background: colorBgContainer }}>
+              <LogoComponent />
+            </Header>
+            <Content style={{ margin: "0 16px" }}>
+              <br />
+              <div
+                style={{
+                  padding: 24,
+                  minHeight: 360,
+                  background: colorBgContainer,
+                }}
+              >
+                <Routes>
+                  <Route path="/posts" element={<Posts></Posts>}></Route>
+                  <Route path="/events" element={<Events></Events>}></Route>
+                  <Route path="/discussions" element={<Discussion />}></Route>
+                  <Route path="/create" element={<CreatePost />}></Route>
+                  <Route path="/people" element={<People />}></Route>
+                </Routes>
+              </div>
+            </Content>
+            <Footer
+              style={{
+                textAlign: "center",
+              }}
+            >
+              Yogesh Manni ©2024
+            </Footer>
+          </Layout>
+        </Layout>
+      )}
+    </>
   );
 };
 
