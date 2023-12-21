@@ -8,7 +8,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
 import Events from "./components/Events/Events";
 import {
   BrowserRouter as Router,
@@ -25,6 +25,7 @@ import CreatePost from "./components/createPost/CreatePost";
 import "./App.css";
 import Login from "./components/Login/Login";
 import { getUserName } from "./helpers/helper";
+import Register from "./components/Register/Register";
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -53,7 +54,7 @@ const items: MenuItem[] = [
   getItem("People", "4", <UserOutlined />, "/people"),
 ];
 
-const LogoComponent = () => {
+export const LogoComponent = () => {
   return (
     <div className="h-[20px] auto m-5 flex items-center justify-center">
       <img src={logo} className="h-10" alt="logo"></img>
@@ -81,43 +82,53 @@ const App: React.FC = () => {
       return;
     }
   };
+
   const containerClass =
-    "container " + (type === "signUp" ? "right-panel-active" : "");
+    "appContainer " + (type === "signUp" ? "right-panel-active" : "");
   return (
     <>
       {!getUserName() ? (
-        <div className="App">
-          <LogoComponent />
+        <div className="h-[100vh]">
           <div className={containerClass} id="container">
             <Routes>
-              <Route path="/" element={<Login></Login>}></Route>
+              {type == "signIn" ? (
+                <Route path="/" element={<Login></Login>}></Route>
+              ) : (
+                <Route path="/" element={<Register></Register>}></Route>
+              )}
             </Routes>
-            <div className="overlay-container">
+            <div className="overlay-container hidden lg:block">
               <div className="overlay">
                 <div className="overlay-panel overlay-left">
-                  <h1>Welcome Back!</h1>
-                  <p>
+                  <h1 className="text-[50px]">Welcome Back!</h1>
+                  <p className="text-[20px] mt-2">
                     To keep connected with us please login with your personal
-                    info
+                    info :)
                   </p>
-                  <button
-                    className="ghost"
+                  <Button
+                    className="bg-sbutton w-[100px] border-dullwhite mt-5"
+                    type="primary"
+                    size="large"
                     id="signIn"
                     onClick={() => handleOnClick("signIn")}
                   >
                     Sign In
-                  </button>
+                  </Button>
                 </div>
                 <div className="overlay-panel overlay-right">
-                  <h1>Hello, Friend!</h1>
-                  <p>Enter your personal details and start journey with us</p>
-                  <button
-                    className="ghost "
+                  <h1 className="text-[50px]">Hello, Friend!</h1>
+                  <p className="text-[20px] mt-2">
+                    Don't have an account? Click on Sign Up below and get one :)
+                  </p>
+                  <Button
+                    className="bg-sbutton w-[100px] border-dullwhite mt-5"
+                    type="primary"
+                    size="large"
                     id="signUp"
                     onClick={() => handleOnClick("signUp")}
                   >
                     Sign Up
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
