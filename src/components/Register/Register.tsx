@@ -7,8 +7,9 @@ import {
 } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LogoComponent } from "../../App";
+import { Link } from "react-router-dom";
 
-export default function Register() {
+export default function Register(props: any) {
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
@@ -137,6 +138,21 @@ export default function Register() {
             >
               Register
             </Button>
+          </Form.Item>
+          <Form.Item className="flex items-center justify-center  lg:hidden">
+            <p>
+              Already have an account?
+              <Link to="/" className="text-sbutton">
+                {" "}
+                <span
+                  onClick={() => {
+                    props.changeType("signIn");
+                  }}
+                >
+                  Sign In Now !
+                </span>
+              </Link>
+            </p>
           </Form.Item>
         </Form>
       </div>

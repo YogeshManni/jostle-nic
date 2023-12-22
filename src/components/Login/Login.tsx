@@ -2,8 +2,9 @@ import React from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import { LogoComponent } from "../../App";
+import { Link } from "react-router-dom";
 
-export default function Login() {
+export default function Login(props: any) {
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };
@@ -56,6 +57,22 @@ export default function Login() {
             >
               Log in
             </Button>
+          </Form.Item>
+
+          <Form.Item className="flex items-center justify-center  lg:hidden">
+            <p>
+              Don't have an account?
+              <Link to="/register" className="text-sbutton">
+                {" "}
+                <span
+                  onClick={() => {
+                    props.changeType("signUp");
+                  }}
+                >
+                  Sign up Now !
+                </span>
+              </Link>
+            </p>
           </Form.Item>
         </Form>
       </div>
