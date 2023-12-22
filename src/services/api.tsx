@@ -92,3 +92,15 @@ export const updatePostLikesInDb = async (postId: any) => {
       return res.data;
     });
 };
+
+export const addUsersInDb = async (data: any) => {
+  return await axios.post(`${baseURL}/users/addUser`, data).then((res) => {
+    return res.data;
+  });
+};
+
+export const loginFromDb = async (data: any) => {
+  return await axios.post(`${baseURL}/users/login`, data).then((res) => {
+    return res.data;
+  });
+};

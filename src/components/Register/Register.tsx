@@ -1,17 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LockOutlined,
   MailOutlined,
   PhoneOutlined,
+  PlusOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Modal,
+  Upload,
+  UploadProps,
+  message,
+} from "antd";
 import { LogoComponent } from "../../App";
 import { Link } from "react-router-dom";
+import { addUsersInDb } from "../../services/api";
 
 export default function Register(props: any) {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const onRegister = async (data: any) => {
+    const res = await addUsersInDb(data);
+    if (res.status == "success") {
+      message.success("Account created successfully, please login now !");
+    } else {
+      message.error("Error occured while account creation, please try again!");
+    }
   };
   const formItemLayout = {
     labelCol: {
@@ -23,6 +39,71 @@ export default function Register(props: any) {
       sm: { span: 16 },
     },
   };
+
+  const [fileList, setFileList] = useState([]);
+  const handleChange = (props: any) => {
+    console.log(props);
+    setFileList(props.fileList);
+  };
+  const uploadButton = (
+    <div>
+      <PlusOutlined />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
+
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [u_img, setImage]: any = useState("");
+  const [dateTime, setDateTime]: any = useState("");
+  const [imgName, setImgName] = useState("");
+
+  const handleCancel = () => setPreviewOpen(false);
+
+  function getImage(img: any, callback: any) {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  function uploadImage(info: any) {
+    console.log(info.file);
+    console.log(dateTime);
+    if (info.file.status == "done") {
+      getImage(info.file.originFileObj, (imageUrl: any) => {
+        setImgName(info.file.name);
+        setImage(imageUrl);
+      });
+    }
+  }
+  const uploadprops: UploadProps = {
+    name: "image-file",
+    multiple: false,
+    listType: "picture-circle",
+
+    action: `${process.env.REACT_APP_BASEURL}/users/uploadImage`,
+
+    data: { name: `Jon${dateTime}` },
+
+    onChange(info: any) {
+      uploadImage(info);
+    },
+    beforeUpload(file) {
+      if (!file.type.includes("image")) {
+        message.error("Please upload an image only");
+        return false;
+      }
+      return true;
+    },
+  };
+
   return (
     <div className="flex flex-col lg:w-[50%] h-full p-10 justify-center  lg:ml-[50%] w-[100vw]">
       <div className="shadow-2xl shadow-[#8b5cf6]/60 p-10 rounded-[15px]">
@@ -31,7 +112,7 @@ export default function Register(props: any) {
           name="normal_login"
           className="login-form mt-10 xl:pr-20"
           initialValues={{ remember: true }}
-          onFinish={onFinish}
+          onFinish={onRegister}
           {...formItemLayout}
         >
           <Form.Item
@@ -50,6 +131,24 @@ export default function Register(props: any) {
               size="large"
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="Username"
+            />
+          </Form.Item>
+          <Form.Item
+            name="fullname"
+            label="Full Name"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Full Name!",
+                whitespace: true,
+              },
+            ]}
+            hasFeedback
+          >
+            <Input
+              size="large"
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Fullname"
             />
           </Form.Item>
           <Form.Item
@@ -129,6 +228,26 @@ export default function Register(props: any) {
               type="number"
             />
           </Form.Item>
+
+          <Form.Item
+            name="profilepic"
+            label="Profile Pic"
+            hasFeedback
+            tooltip="It's a good idea to add a profile pic so others can know who you are :)"
+          >
+            <Upload {...uploadprops} onChange={(event) => handleChange(event)}>
+              {fileList.length == 1 ? null : uploadButton}
+            </Upload>
+            <Modal
+              open={previewOpen}
+              title={previewTitle}
+              footer={null}
+              onCancel={handleCancel}
+            >
+              <img alt="example" style={{ width: "100%" }} src={previewImage} />
+            </Modal>
+          </Form.Item>
+
           <Form.Item className="flex justify-center">
             <Button
               type="primary"
@@ -139,10 +258,10 @@ export default function Register(props: any) {
               Register
             </Button>
           </Form.Item>
-          <Form.Item className="flex items-center justify-center  lg:hidden">
+          <div className="flex items-center justify-center  lg:hidden">
             <p>
-              Already have an account?
-              <Link to="/" className="text-sbutton">
+              Already have an account?&nbsp;
+              <Link to="/" className="text-sbutton inline-flex">
                 {" "}
                 <span
                   onClick={() => {
@@ -153,7 +272,7 @@ export default function Register(props: any) {
                 </span>
               </Link>
             </p>
-          </Form.Item>
+          </div>
         </Form>
       </div>
     </div>

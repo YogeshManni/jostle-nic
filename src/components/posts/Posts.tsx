@@ -92,7 +92,7 @@ const Posts = () => {
                     alt="profiles"
                   />
                 </div>
-                <h2 className=" font-semibold">{post.username}</h2>
+                <h2 className="font-semibold">{post.username}</h2>
               </div>
               {/* <DotsHorizontalIcon className="w-5 h-5 cursor-pointer" /> */}
             </div>

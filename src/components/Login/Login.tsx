@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, message } from "antd";
 import { LogoComponent } from "../../App";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { loginFromDb } from "../../services/api";
+import { setUser } from "../../helpers/helper";
 
 export default function Login(props: any) {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const navigate = useNavigate();
+  const [login, setLogin] = useState(false);
+  const [usernameFound, setUsernameFound] = useState(true);
+  const [passwordStatus, setPasswordStatus] = useState(true);
+
+  const onLogin = async (data: any) => {
+    setLogin(true);
+    const res = await loginFromDb(data);
+    if (res.status == "not_found") {
+      setUsernameFound(false);
+      message.error(
+        "User does not exist, plese check username again or create a new acount !!"
+      );
+    } else if (res.status == "incorrect") {
+      setPasswordStatus(false);
+      message.error("Password Incorrect, please try again !!");
+    } else if (res.status == "internal_error") {
+      message.error("Some unknown error occured, please try again!!");
+    } else if (res.status == "success") {
+      setUser(res.data);
+      message.success("Login succeed, getting you to homepage !");
+      navigate("/posts");
+    }
+    setLogin(false);
   };
 
   return (
@@ -17,22 +41,35 @@ export default function Login(props: any) {
           name="normal_login"
           className="login-form mt-10 xl:px-20"
           initialValues={{ remember: true }}
-          onFinish={onFinish}
+          onFinish={onLogin}
         >
           <Form.Item
             name="username"
             label="Username"
+            validateStatus={!usernameFound ? "error" : undefined}
+            help={
+              !usernameFound
+                ? "User doesn't exist, please create a new account"
+                : undefined
+            }
             rules={[{ required: true, message: "Please input your Username!" }]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="Username"
               size="large"
+              onChange={() => setUsernameFound(true)}
             />
           </Form.Item>
           <Form.Item
             name="password"
             label="Password"
+            validateStatus={!passwordStatus ? "error" : undefined}
+            help={
+              !passwordStatus
+                ? "Password Incorrect, please try again !!"
+                : undefined
+            }
             rules={[{ required: true, message: "Please input your Password!" }]}
           >
             <Input.Password
@@ -40,6 +77,7 @@ export default function Login(props: any) {
               type="password"
               placeholder="Password"
               size="large"
+              onChange={() => setPasswordStatus(true)}
             />
           </Form.Item>
           <Form.Item>
@@ -54,6 +92,7 @@ export default function Login(props: any) {
               htmlType="submit"
               className="login-form-button bg-button w-[100px]"
               size="large"
+              loading={login}
             >
               Log in
             </Button>

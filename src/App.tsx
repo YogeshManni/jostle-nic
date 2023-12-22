@@ -24,7 +24,7 @@ import People from "./components/People/People";
 import CreatePost from "./components/createPost/CreatePost";
 import "./App.css";
 import Login from "./components/Login/Login";
-import { getUserName } from "./helpers/helper";
+import { getUser } from "./helpers/helper";
 import Register from "./components/Register/Register";
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -87,7 +87,7 @@ const App: React.FC = () => {
     "appContainer " + (type === "signUp" ? "right-panel-active" : "");
   return (
     <>
-      {!getUserName() ? (
+      {!getUser() ? (
         <div className="h-[100vh]">
           <div className={containerClass} id="container">
             <Routes>
