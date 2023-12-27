@@ -1,7 +1,9 @@
-import { Button, Card, Upload, UploadProps, message } from "antd";
+import { Avatar, Button, Card, Upload, UploadProps, message } from "antd";
 import React from "react";
 import "./Profile.css";
 import { UploadOutlined } from "@ant-design/icons";
+import moment from "moment";
+import { getUser } from "../../helpers/helper";
 function Profile(props: any) {
   const upProps: UploadProps = {
     name: "file",
@@ -26,31 +28,41 @@ function Profile(props: any) {
       <div className="profileContainer">
         <Card
           hoverable
-          className="profileCard1"
-          cover={
+          className="flex justify-center shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] p-5"
+          /*  cover={
             <img
+              className="h-[500px] w-[700px]"
               alt="example"
-              src={"https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"}
+              src={`${process.env.REACT_APP_BASEURL}/profiles/${props.user.img}`}
             />
-          }
+          } */
         >
-          <div className="uploadBtn">
-            <Upload {...upProps}>
-              <Button icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>
-          </div>
-          <b>
-            <p>{props.user.fullname}</p>
-          </b>
-          <hr />
-          <div className="cardData">
-            <p>{props.user.role}</p>
+          <Avatar
+            size={200}
+            src={`${process.env.REACT_APP_BASEURL}/profiles/${props.user.img}`}
+          />
 
-            <p>{props.user.phoneno}</p>
+          <div className="m-3 flex items-center flex-col">
+            <b>
+              <p>{props.user.fullname.toUpperCase()}</p>
+            </b>
+
+            <p className="text-[13px]">{props.user.phoneno}</p>
+            <Upload {...upProps} className="mt-2 bg-sbutton  border-sbutton !">
+              <Button
+                className="border-sbutton round-[20px] !"
+                icon={<UploadOutlined />}
+              >
+                Click to Upload
+              </Button>
+            </Upload>
           </div>
         </Card>
 
-        <Card hoverable className="profileCard2">
+        <Card
+          hoverable
+          className="flex justify-center shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] p-5 lg:ml-3 mt-3 lg:mt-0"
+        >
           <div className="bioDiv">
             <b>User Name</b>
             <span>{props.user.username}</span>
@@ -78,7 +90,7 @@ function Profile(props: any) {
           <hr />
           <div className="bioDiv">
             <b>Date Joined</b>
-            <span>{props.user.datejoined}</span>
+            <span>{moment(props.user.datejoined).format("LLL")}</span>
           </div>
         </Card>
       </div>

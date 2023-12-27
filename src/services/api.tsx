@@ -85,12 +85,10 @@ export const getPostsFromDb = async (obj: any) => {
   });
 };
 
-export const updatePostLikesInDb = async (postId: any) => {
-  return await axios
-    .post(`${baseURL}/posts/updateLikes`, postId)
-    .then((res) => {
-      return res.data;
-    });
+export const updatePostLikesInDb = async (data: any) => {
+  return await axios.post(`${baseURL}/posts/updateLikes`, data).then((res) => {
+    return res.data;
+  });
 };
 
 export const addUsersInDb = async (data: any) => {

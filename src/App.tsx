@@ -3,6 +3,7 @@ import {
   AppstoreAddOutlined,
   DesktopOutlined,
   FileOutlined,
+  LogoutOutlined,
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
@@ -21,11 +22,12 @@ import Discussion from "./components/Discussion/Discussion";
 import Posts from "./components/posts/Posts";
 import logo from "./assets/img/logo.png";
 import People from "./components/People/People";
-import CreatePost from "./components/createPost/CreatePost";
+
 import "./App.css";
 import Login from "./components/Login/Login";
-import { getUser } from "./helpers/helper";
+import { getUser, logout } from "./helpers/helper";
 import Register from "./components/Register/Register";
+import CreatePost from "./components/createPost/CreatePost";
 const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
@@ -47,11 +49,12 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Posts", "0", <PieChartOutlined />, "/"),
+  getItem("Posts", "0", <PieChartOutlined />, "/posts"),
   getItem("Events", "1", <DesktopOutlined />, "/events"),
   getItem("Discussions", "2", <FileOutlined />, "/discussions"),
   getItem("Create", "3", <AppstoreAddOutlined />, "/create"),
   getItem("People", "4", <UserOutlined />, "/people"),
+  getItem("Logout", "5", <LogoutOutlined />, "/"),
 ];
 
 export const LogoComponent = () => {
@@ -72,7 +75,11 @@ const App: React.FC = () => {
   const menuClick: MenuProps["onClick"] = (e: any) => {
     //
     let data: any = items[e.key];
-    navigate(data.route);
+    if (data.label === "Logout") {
+      logout();
+    } else {
+      navigate(data.route);
+    }
   };
 
   const [type, setType] = useState("signIn");

@@ -3,16 +3,13 @@
   width: 45%;
   height: 100%;
 }
-.profileCard2 {
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  width: 45%;
-}
 
 .bioDiv {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  padding: 10px 0;
 }
 
 .profileCard1 hr {
@@ -24,10 +21,9 @@
 .profileContainer {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
 }
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 1023px) {
   .bioDiv {
     display: flex;
     flex-direction: column;
@@ -44,4 +40,8 @@
 
 .uploadBtn .ant-upload-wrapper {
   float: right !important;
+}
+
+.profileCard2 hr {
+  color: gainsboro;
 }

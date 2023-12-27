@@ -19,16 +19,9 @@ import {
 import { LogoComponent } from "../../App";
 import { Link } from "react-router-dom";
 import { addUsersInDb } from "../../services/api";
+import moment from "moment";
 
 export default function Register(props: any) {
-  const onRegister = async (data: any) => {
-    const res = await addUsersInDb(data);
-    if (res.status == "success") {
-      message.success("Account created successfully, please login now !");
-    } else {
-      message.error("Error occured while account creation, please try again!");
-    }
-  };
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -41,6 +34,7 @@ export default function Register(props: any) {
   };
 
   const [fileList, setFileList] = useState([]);
+
   const handleChange = (props: any) => {
     console.log(props);
     setFileList(props.fileList);
@@ -64,8 +58,18 @@ export default function Register(props: any) {
   const [u_img, setImage]: any = useState("");
   const [dateTime, setDateTime]: any = useState("");
   const [imgName, setImgName] = useState("");
-
+  const [username, setUsername] = useState("");
   const handleCancel = () => setPreviewOpen(false);
+
+  const onRegister = async (data: any) => {
+    data.profilepic = imgName;
+    const res = await addUsersInDb(data);
+    if (res.status == "success") {
+      message.success("Account created successfully, please login now !");
+    } else {
+      message.error("Error occured while account creation, please try again!");
+    }
+  };
 
   function getImage(img: any, callback: any) {
     const reader = new FileReader();
@@ -78,11 +82,12 @@ export default function Register(props: any) {
     console.log(dateTime);
     if (info.file.status == "done") {
       getImage(info.file.originFileObj, (imageUrl: any) => {
-        setImgName(info.file.name);
+        setImgName(`${username}${dateTime}${info.file.name}`);
         setImage(imageUrl);
       });
     }
   }
+
   const uploadprops: UploadProps = {
     name: "image-file",
     multiple: false,
@@ -90,12 +95,15 @@ export default function Register(props: any) {
 
     action: `${process.env.REACT_APP_BASEURL}/users/uploadImage`,
 
-    data: { name: `Jon${dateTime}` },
+    data: { name: `${username}${dateTime}` },
 
     onChange(info: any) {
+      handleChange(info);
+      console.log("uploaded");
       uploadImage(info);
     },
     beforeUpload(file) {
+      console.log(file);
       if (!file.type.includes("image")) {
         message.error("Please upload an image only");
         return false;
@@ -103,6 +111,11 @@ export default function Register(props: any) {
       return true;
     },
   };
+
+  useEffect(() => {
+    //initlaizing datetime for new profle pic
+    if (!dateTime) setDateTime(String(moment().format()));
+  }, []);
 
   return (
     <div className="flex flex-col lg:w-[50%] h-full p-10 justify-center  lg:ml-[50%] w-[100vw]">
@@ -131,6 +144,7 @@ export default function Register(props: any) {
               size="large"
               prefix={<UserOutlined className="site-form-item-icon" />}
               placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </Form.Item>
           <Form.Item
@@ -235,7 +249,7 @@ export default function Register(props: any) {
             hasFeedback
             tooltip="It's a good idea to add a profile pic so others can know who you are :)"
           >
-            <Upload {...uploadprops} onChange={(event) => handleChange(event)}>
+            <Upload {...uploadprops}>
               {fileList.length == 1 ? null : uploadButton}
             </Upload>
             <Modal

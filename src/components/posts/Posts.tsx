@@ -3,8 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import "./Posts.scss";
 import {
   BookOutlined,
+  HeartFilled,
   HeartOutlined,
   MessageOutlined,
+  SendOutlined,
   ShareAltOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
@@ -17,6 +19,7 @@ import {
 import Comments from "../Discussion/Comments/Comments";
 import moment from "moment";
 import { Image } from "antd";
+import { getUser } from "../../helpers/helper";
 
 const Posts = () => {
   const [posts, setPosts]: any = useState([]);
@@ -25,19 +28,20 @@ const Posts = () => {
   const [comment, setComment] = useState("");
 
   useEffect(() => {
-    const email = "jon@gmail.com";
+    const email = getUser().email;
     const getPosts = async () => {
       const posts = await getPostsFromDb({ email: email });
       posts.posts.forEach((item: any, ind: number) => {
         item.input = "";
       });
-
+      console.log(posts.posts);
       setPosts(posts.posts);
     };
     getPosts();
   }, []);
 
   const handleComment = (e: any, post: any) => {
+    console.log(e);
     post.input = e.target.value;
     setComment(e.target.value);
   };
@@ -50,10 +54,23 @@ const Posts = () => {
   };
 
   function handleLikes(post: any) {
-    post.likes += 1;
-
+    const user = getUser().username;
+    let type = "add";
+    if (!post.liked_users) post.liked_users = [];
+    if (!post.liked_users.includes(user)) {
+      post.liked_users.push(user);
+      post.likes += 1;
+    } else {
+      var index = post.liked_users.indexOf(user);
+      if (index !== -1) {
+        post.liked_users.splice(index, 1);
+      }
+      post.likes -= 1;
+      type = "rem";
+    }
+    console.log(posts);
     setPosts([...posts]);
-    updatePostLikesInDb({ id: post.id });
+    updatePostLikesInDb({ id: post.id, username: user, type: type });
   }
 
   async function addComment(postId: any, post: any) {
@@ -63,7 +80,7 @@ const Posts = () => {
     }
     const newComment = {
       discussionid: postId,
-      username: "jon",
+      username: getUser().username,
       comment: comment,
       date: moment().format("LLL"),
       type: "posts",
@@ -80,7 +97,7 @@ const Posts = () => {
         <div key={ind}>
           <div
             key={ind}
-            className="relative card space-y-4 max-w-[430px] shadow-lg p-4 rounded-[20px]"
+            className="relative card space-y-4 max-w-[430px] shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] p-4 rounded-[20px]"
           >
             {/* Heading */}
             <div className="flex justify-between items-center">
@@ -98,12 +115,24 @@ const Posts = () => {
             </div>
 
             {/* Posted Image */}
-            <div className="relative  aspect-square overflow-hidden">
-              <Image
-                src={`${process.env.REACT_APP_BASEURL}/posts/${post.img}`}
-                alt={post.username}
-              />
-            </div>
+
+            {!(post.type === "video") ? (
+              <div className="relative  aspect-square overflow-hidden">
+                <Image
+                  src={`${process.env.REACT_APP_BASEURL}/posts/${post.img}`}
+                  alt={post.username}
+                />
+              </div>
+            ) : (
+              <div className="h-auto">
+                <video controls className="h-auto w-full ">
+                  <source
+                    src={`${process.env.REACT_APP_BASEURL}/posts/${post.img}`}
+                    type="video/mp4"
+                  />
+                </video>
+              </div>
+            )}
 
             {/* Actions */}
             <div className="space-y-2">
@@ -113,7 +142,12 @@ const Posts = () => {
                     className="border-none px-[0px]"
                     onClick={(e) => handleLikes(post)}
                   >
-                    <HeartOutlined className="text-[20px] text-red-500 !" />
+                    {post.liked_users &&
+                    post.liked_users.includes(getUser().username) ? (
+                      <HeartFilled className="text-red text-[20px]" />
+                    ) : (
+                      <HeartOutlined className="text-[20px]" />
+                    )}
                   </Button>
                   <Button
                     className="border-none px-[20px]"
@@ -154,16 +188,21 @@ const Posts = () => {
                 value={post.input}
                 type="text"
                 placeholder="Add a comment"
+                onKeyDown={(e: any) => {
+                  if (e.key == "Enter") {
+                    addComment(post.id, post);
+                  }
+                }}
                 onChange={(event) => {
                   handleComment(event, post);
                 }}
               />
-              <button
+              <Button
                 onClick={() => addComment(post.id, post)}
-                className="text-blue-500"
+                className="border-none px-[0px] text-[18px] mt-[-2px]"
               >
-                Post
-              </button>
+                <SendOutlined />
+              </Button>
             </div>
           </div>
 

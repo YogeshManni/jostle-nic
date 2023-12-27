@@ -5,6 +5,7 @@ import "./Comments.css";
 import { SendOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { addCommentTodb, getCommentFromdb } from "../../../services/api";
+import { getUser } from "../../../helpers/helper";
 
 interface DataType {
   gender: string;
@@ -67,7 +68,7 @@ function Comments(props: any) {
   const addComment = async () => {
     const newComment = {
       discussionid: props._discussionId,
-      username: "bob",
+      username: getUser().username,
       comment: comment,
       date: moment().format("LLL"),
       type: props.type,
@@ -114,12 +115,17 @@ function Comments(props: any) {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key == "Enter") addComment();
+            if (e.key === "Enter") addComment();
           }}
           placeholder="Write a comment"
         />
-        <Button type="primary" onClick={addComment}>
-          <SendOutlined />
+        <Button
+          onClick={() => addComment()}
+          className="border-none text-[18px]   bg-[#60a5fa]"
+        >
+          <span className="mt-[-20px]">
+            <SendOutlined />
+          </span>
         </Button>
       </Space.Compact>
     </>

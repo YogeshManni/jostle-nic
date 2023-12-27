@@ -1,7 +1,13 @@
 export const getUser = () => {
-  return localStorage.getItem("user");
+  const user = sessionStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
 };
 
 export const setUser = (data: any) => {
-  localStorage.setItem("user", data);
+  sessionStorage.setItem("user", JSON.stringify(data));
+};
+
+export const logout = () => {
+  sessionStorage.removeItem("user");
+  window.location.href = "/";
 };

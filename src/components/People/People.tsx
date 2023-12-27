@@ -32,11 +32,9 @@ function People() {
                 className="peopleCards"
                 cover={
                   <img
-                    height="200px"
+                    className="h-[250px]"
                     alt="example"
-                    src={
-                      "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-                    }
+                    src={`${process.env.REACT_APP_BASEURL}/profiles/${item.img}`}
                   />
                 }
               >
