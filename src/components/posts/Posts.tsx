@@ -10,7 +10,7 @@ import {
   ShareAltOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Badge, Button, Modal } from "antd";
+import { Avatar, Badge, Button, Modal } from "antd";
 import {
   addCommentTodb,
   getPostsFromDb,
@@ -102,11 +102,14 @@ const Posts = () => {
             {/* Heading */}
             <div className="flex justify-between items-center">
               <div className="flex gap-3 items-center ">
-                <div className="w-8 h-6 overflow-hidden rounded-full cursor-pointer">
-                  <img
-                    className="w-full"
-                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${ind}`}
-                    alt="profiles"
+                <div className="w-8 h-6  cursor-pointer">
+                  <Avatar
+                    size={30}
+                    src={
+                      post.profilepic
+                        ? `${process.env.REACT_APP_BASEURL}/profiles/${post.profilepic}`
+                        : `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${ind}`
+                    }
                   />
                 </div>
                 <h2 className="font-semibold">{post.username}</h2>

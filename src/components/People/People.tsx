@@ -8,12 +8,12 @@ function People() {
   const [users, setUsers]: any = useState([]);
   const [modalState, setModalState]: any = useState(false);
   const [currentUser, setCurrentUserState]: any = useState(null);
+  const _getUsers = async () => {
+    const res = await getUsersFromDb();
+    console.log(res);
+    setUsers([...res]);
+  };
   useEffect(() => {
-    const _getUsers = async () => {
-      const res = await getUsersFromDb();
-      console.log(res);
-      setUsers([...res]);
-    };
     _getUsers();
   }, []);
 
@@ -33,7 +33,7 @@ function People() {
                 cover={
                   <img
                     className="h-[250px]"
-                    alt="example"
+                    alt="user"
                     src={`${process.env.REACT_APP_BASEURL}/profiles/${item.img}`}
                   />
                 }
@@ -54,12 +54,13 @@ function People() {
       {modalState ? (
         <Modal
           className="peopleModal"
-          width="50vw"
+          width="40vw"
           footer={null}
           title="Profile"
           open={modalState}
           onCancel={() => {
             setModalState(false);
+            _getUsers();
           }}
         >
           <Profile user={currentUser} />

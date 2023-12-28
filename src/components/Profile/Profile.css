@@ -23,7 +23,7 @@
   flex-direction: row;
 }
 
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 1535px) {
   .bioDiv {
     display: flex;
     flex-direction: column;
@@ -31,8 +31,7 @@
   .profileContainer {
     flex-direction: column;
   }
-  .profileCard1,
-  .profileCard2 {
+  .profileCard1 {
     width: 100%;
     margin-top: 20px;
   }
@@ -42,6 +41,6 @@
   float: right !important;
 }
 
-.profileCard2 hr {
-  color: gainsboro;
+.usersinfo hr {
+  color: rgb(179, 179, 179) !important;
 }

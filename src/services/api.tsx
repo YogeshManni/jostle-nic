@@ -102,3 +102,11 @@ export const loginFromDb = async (data: any) => {
     return res.data;
   });
 };
+
+export const updateDpinDb = async (data: any) => {
+  return await axios
+    .post(`${baseURL}/users/updateUserdata`, data)
+    .then((res) => {
+      return res.data;
+    });
+};
