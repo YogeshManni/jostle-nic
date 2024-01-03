@@ -62,7 +62,7 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
     setContent(!newPost && postData);
 
     return () => {
-      console.log("unmounted!!");
+      // console.log("unmounted!!");
     };
     // editorContentRef.current.value = postData;
   }, []);

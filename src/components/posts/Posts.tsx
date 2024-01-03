@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import "./Posts.scss";
 import {
   BookOutlined,
@@ -26,7 +27,7 @@ const Posts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postId, setPostId] = useState(0);
   const [comment, setComment] = useState("");
-
+  const [showEmojis, setShowEmojis] = useState(false);
   useEffect(() => {
     const email = getUser().email;
     const getPosts = async () => {
@@ -42,8 +43,9 @@ const Posts = () => {
 
   const handleComment = (e: any, post: any) => {
     console.log(e);
-    post.input = e.target.value;
-    setComment(e.target.value);
+    if (e.native) post.input += e.native;
+    else post.input = e.target.value;
+    setComment(e.native || e.target.value);
   };
   const showModal = () => {
     setIsModalOpen(true);
@@ -120,7 +122,7 @@ const Posts = () => {
             {/* Posted Image */}
 
             {!(post.type === "video") ? (
-              <div className="relative  aspect-square overflow-hidden">
+              <div className="relative  aspect-square overflow-hidden z-20">
                 <Image
                   src={`${process.env.REACT_APP_BASEURL}/posts/${post.img}`}
                   alt={post.username}
@@ -182,9 +184,27 @@ const Posts = () => {
             </div>
             <hr className="text-[#d1d5db]" />
             <div className="flex gap-4" style={{ marginTop: "5px" }}>
+              {showEmojis && (
+                <div className="mt-[40px] z-30 !">
+                  <Picker
+                    data={data}
+                    onEmojiSelect={(event: any) => {
+                      handleComment(event, post);
+                    }}
+                    style={{ zIndex: "99" }}
+                    className="z-30 !"
+                  />
+                </div>
+              )}
               <Button className="border-none p-[0px] !">
-                <SmileOutlined className="text-[18px]" />
+                <SmileOutlined
+                  className="text-[18px]"
+                  onClick={() => {
+                    setShowEmojis(!showEmojis);
+                  }}
+                />
               </Button>
+
               <input
                 className="focus:outline-none w-full"
                 key={ind}
@@ -212,6 +232,7 @@ const Posts = () => {
           <hr className="my-[20px] text-[#d1d5db]" />
         </div>
       ))}
+
       {isModalOpen ? (
         <Modal
           footer={null}

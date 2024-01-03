@@ -60,7 +60,7 @@ const Events = () => {
   return (
     <>
       <Button
-        type="primary"
+        className="bg-sbutton"
         onClick={() => {
           setPostData(null);
           setNewPost(true);
@@ -69,8 +69,10 @@ const Events = () => {
         size={"large"}
         style={{ float: "right" }}
       >
-        <PlusOutlined />
-        Add Event
+        <span>
+          <PlusOutlined />
+          &nbsp; Add Event
+        </span>
       </Button>
 
       <Row style={{ marginTop: "50px" }} gutter={[18, 18]}>
@@ -134,6 +136,7 @@ const Events = () => {
           <Modal
             title="Add Event"
             open={true}
+            okButtonProps={{ style: { backgroundColor: "#8b5cf6" } }}
             onOk={() => addEventRef.current.addEvent()}
             onCancel={() => setModalState(false)}
             width={window.innerWidth}
