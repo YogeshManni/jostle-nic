@@ -93,18 +93,22 @@ function Comments(props: any) {
         <List
           dataSource={data}
           renderItem={(item: any) => (
-            <List.Item key={item.img}>
-              <List.Item.Meta
-                className="metaList"
-                avatar={
-                  <Avatar
-                    src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${props._discussionid}`}
-                  />
-                }
-                title={<a href="https://ant.design">{item.username}</a>}
-                description={item.comment}
-              />
-              <div className="commentDateTime">{item.date}</div>
+            <List.Item key={item.img} className="listItem">
+              <div className="flex flex-col">
+                <List.Item.Meta
+                  className="metaList"
+                  avatar={
+                    <Avatar
+                      src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${props._discussionid}`}
+                    />
+                  }
+                  title={<a href="https://ant.design">{item.username}</a>}
+                  description={item.comment}
+                />
+                <div className="commentDateTime mt-[6px] ml-[50px] !">
+                  {item.date}
+                </div>
+              </div>
             </List.Item>
           )}
         />

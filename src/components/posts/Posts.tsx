@@ -34,6 +34,7 @@ const Posts = () => {
       const posts = await getPostsFromDb({ email: email });
       posts.posts.forEach((item: any, ind: number) => {
         item.input = "";
+        item.showEmoji = false;
       });
       console.log(posts.posts);
       setPosts(posts.posts);
@@ -45,7 +46,7 @@ const Posts = () => {
     console.log(e);
     if (e.native) post.input += e.native;
     else post.input = e.target.value;
-    setComment(e.native || e.target.value);
+    setComment(post.input);
   };
   const showModal = () => {
     setIsModalOpen(true);
@@ -184,8 +185,8 @@ const Posts = () => {
             </div>
             <hr className="text-[#d1d5db]" />
             <div className="flex gap-4" style={{ marginTop: "5px" }}>
-              {showEmojis && (
-                <div className="mt-[40px] z-30 !">
+              {post.showEmoji && (
+                <div className="mt-[40px] z-30 absolute !">
                   <Picker
                     data={data}
                     onEmojiSelect={(event: any) => {
@@ -200,6 +201,7 @@ const Posts = () => {
                 <SmileOutlined
                   className="text-[18px]"
                   onClick={() => {
+                    post.showEmoji = !post.showEmoji;
                     setShowEmojis(!showEmojis);
                   }}
                 />
@@ -211,6 +213,10 @@ const Posts = () => {
                 value={post.input}
                 type="text"
                 placeholder="Add a comment"
+                onFocus={() => {
+                  post.showEmoji = false;
+                  setShowEmojis(false);
+                }}
                 onKeyDown={(e: any) => {
                   if (e.key == "Enter") {
                     addComment(post.id, post);
