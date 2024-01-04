@@ -59,6 +59,7 @@ function Comments(props: any) {
   useEffect(() => {
     const _getComments = async () => {
       const res = await getCommentFromdb(props._discussionId, props.type);
+      console.log(res);
       setData([...data, ...res]);
       setLoading(false);
     };
@@ -106,7 +107,7 @@ function Comments(props: any) {
                   description={item.comment}
                 />
                 <div className="commentDateTime mt-[6px] ml-[50px] !">
-                  {item.date}
+                  {moment(item.date).fromNow()}
                 </div>
               </div>
             </List.Item>

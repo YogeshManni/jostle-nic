@@ -186,7 +186,7 @@ const Posts = () => {
             <hr className="text-[#d1d5db]" />
             <div className="flex gap-4" style={{ marginTop: "5px" }}>
               {post.showEmoji && (
-                <div className="mt-[40px] z-30 absolute !">
+                <div className="mt-[50px] z-30 absolute !">
                   <Picker
                     data={data}
                     onEmojiSelect={(event: any) => {
@@ -207,11 +207,10 @@ const Posts = () => {
                 />
               </Button>
 
-              <input
-                className="focus:outline-none w-full"
+              <textarea
+                className="focus:outline-none w-full resize-none mt-2 pb-0 mb-[-15px]"
                 key={ind}
                 value={post.input}
-                type="text"
                 placeholder="Add a comment"
                 onFocus={() => {
                   post.showEmoji = false;
