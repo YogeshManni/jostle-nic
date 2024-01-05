@@ -10,6 +10,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import "./AddEvent.css";
 import moment from "moment";
+import { getUser } from "../../helpers/helper";
 const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
   const [content, setContent] = useState("");
   const editorRef = useRef<any>("");
@@ -34,6 +35,7 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
     ],
   };
 
+  // react hook to call a method in child component from parent one
   useImperativeHandle(ref, () => ({
     addEvent() {
       const editorContent = editorContentRef.current.value;
@@ -43,8 +45,8 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
       const data = {
         frontText: editorContent.replace(/<\/?[^>]+(>|$)/g, ""),
         img: (frontImage && frontImage[1]) || null,
-        avtSrc: "https://xsgames.co/randomusers/avatar.php?g=pixel",
-        userName: "Josh wells",
+        avtSrc: "",
+        userName: getUser().username,
         content: editorContent,
         date: moment().format("LLL"),
       };
@@ -55,11 +57,12 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
   const [editorHeight, setEditorHeight] = useState(10);
 
   useEffect(() => {
+    console.log(postData);
     let parentHeight = editorRef.current.parentElement.clientHeight;
     if (window.innerWidth < 500) parentHeight -= 60;
     setEditorHeight(parentHeight);
 
-    setContent(!newPost && postData);
+    setContent(!newPost && postData.content);
 
     return () => {
       // console.log("unmounted!!");
@@ -77,6 +80,7 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
           style={{ height: editorHeight - 50 }}
           value={content}
           modules={modules}
+          readOnly={getUser().username === postData.username ? false : true}
         />
       </div>
       {/*  ) : (

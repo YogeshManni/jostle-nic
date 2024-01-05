@@ -9,6 +9,12 @@ export const addEventToDb = async (data: any) => {
   });
 };
 
+export const updateEventInDb = async (data: any) => {
+  return await axios.post(`${baseURL}/event/updateEvent`, data).then((res) => {
+    return res;
+  });
+};
+
 export const getEventFromDb = async () => {
   console.log(`${baseURL}/event/`);
   return await axios.get(`${baseURL}/event/`).then((res) => {

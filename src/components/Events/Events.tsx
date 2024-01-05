@@ -14,8 +14,10 @@ import {
   getEventFromDb,
   updateEventLikesInDb,
   updateEventViews,
+  updateEventInDb,
 } from "../../services/api";
 import Comments from "../Discussion/Comments/Comments";
+import { getUser } from "../../helpers/helper";
 const { Meta } = Card;
 <style></style>;
 const Events = () => {
@@ -24,13 +26,14 @@ const Events = () => {
 
   const [events, setEvents] = useState<any[]>([]);
   const [newPost, setNewPost] = useState(false);
-  const [postData, setPostData] = useState(null);
+  const [postData, setPostData]: any = useState(null);
   const [eventId, setEventId] = useState(null);
   const addEventRef = useRef<any>();
   const addEvent = async (eventData: string) => {
-    console.log(eventData);
-    const res = await addEventToDb(eventData);
-
+    let res = null;
+    if (postData.username === getUser().username)
+      res = await updateEventInDb(eventData);
+    else res = await addEventToDb(eventData);
     setEvents([...events, eventData]);
     setModalState(false);
   };
@@ -51,7 +54,7 @@ const Events = () => {
   };
 
   const handleCardClick = async (item: any) => {
-    setPostData(item.content);
+    setPostData(item);
     setNewPost(false);
     setModalState(true);
     await updateEventViews({ id: item.id, views: item.views + 1 });
@@ -138,6 +141,9 @@ const Events = () => {
             open={true}
             okButtonProps={{ style: { backgroundColor: "#8b5cf6" } }}
             onOk={() => addEventRef.current.addEvent()}
+            okText={
+              postData && postData.username === getUser().username && "Update"
+            }
             onCancel={() => setModalState(false)}
             width={window.innerWidth}
             bodyStyle={{ height: window.innerHeight - 200 }}
