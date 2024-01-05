@@ -58,7 +58,7 @@ const AddEvent = forwardRef(({ getAddEvent, newPost, postData }: any, ref) => {
     let parentHeight = editorRef.current.parentElement.clientHeight;
     if (window.innerWidth < 500) parentHeight -= 60;
     setEditorHeight(parentHeight);
-    console.log(postData);
+
     setContent(!newPost && postData);
 
     return () => {

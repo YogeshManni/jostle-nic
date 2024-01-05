@@ -30,14 +30,14 @@ const Events = () => {
   const addEvent = async (eventData: string) => {
     console.log(eventData);
     const res = await addEventToDb(eventData);
-    console.log(res);
+
     setEvents([...events, eventData]);
     setModalState(false);
   };
 
   const _getEvents = async () => {
     const eves = await getEventFromDb();
-    console.log(eves);
+
     setEvents(eves);
   };
 
